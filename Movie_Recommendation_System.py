@@ -18,19 +18,11 @@ movie_titles.columns = ['item_id','title']
 df = pd.merge(df,movie_titles,on='item_id')
 
 
-#print(df.groupby('title').mean()['rating'].sort_values(ascending=False))
-#print(df.groupby('title').count()['rating'].sort_values(ascending=False).head())
-
 
 ratings = pd.DataFrame(df.groupby('title').mean()['rating'])
 ratings['number of ratings'] = pd.DataFrame(df.groupby('title').count()['rating'])
 ratings.sort_values(by='rating',ascending=False)
-# plt.figure(figsize=(10,6))
-# plt.hist(ratings['number of ratings'],bins=70)
-# plt.show()
 
-# plt.hist(ratings['rating'],bins=70)
-# plt.show()
 
 sns.jointplot(x=ratings['rating'],y=ratings['number of ratings'])
 
@@ -41,9 +33,9 @@ star_wars_rating = movie_mat['Star Wars (1977)']
 similar_to_star_wars = movie_mat.corrwith(star_wars_rating)
 corr_starwars = pd.DataFrame(similar_to_star_wars,columns=['Correlation'])
 corr_starwars.dropna(inplace=True)
-#print(corr_starwars.sort_values(by='Correlation',ascending=False).head(n=10))
+
 corr_starwars = corr_starwars.join(ratings['number of ratings'])
-#print(corr_starwars[corr_starwars['number of ratings'] > 100].sort_values(by='Correlation',ascending=False).head())
+
 
 
 def predict_movies(movie_name):
@@ -57,4 +49,4 @@ def predict_movies(movie_name):
     return predictions
 
 
-#print(predict_movies('Titanic (1997)').head())
+
